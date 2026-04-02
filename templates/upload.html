@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Logo - LogoMetric{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <h2 class="mb-4 text-center">Upload Your Logo</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <input type="file" name="logo" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-warning w-100">Analyze Logo</button>
+    </form>
+</div>
+{% endblock %}

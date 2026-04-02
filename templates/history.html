@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}History - LogoMetric{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Analysis History</h1>
+
+<form method="GET" class="row g-3 mb-4">
+    <div class="col-md-6">
+        <input 
+            type="text" 
+            name="search" 
+            class="form-control" 
+            placeholder="Search by filename"
+            value="{{ search_query }}">
+    </div>
+
+    <div class="col-md-3">
+        <input 
+            type="number" 
+            name="min_score" 
+            class="form-control" 
+            placeholder="Min overall score"
+            value="{{ min_score }}">
+    </div>
+
+    <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-warning w-100">Apply</button>
+        <a href="/history" class="btn btn-outline-light w-100">Reset</a>
+    </div>
+</form>
+
+{% if analyses %}
+    <div class="row">
+        {% for analysis in analyses %}
+            <div class="col-md-6 mb-4">
+                <div class="card bg-black text-white border-secondary h-100">
+                    <img src="/static/uploads/{{ analysis.filename }}" 
+                         class="img-fluid rounded-top"
+                         style="max-height:300px; object-fit:contain;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ analysis.filename }}</h5>
+                        {% if "Logo Classification: Likely Logo" in analysis.result %}
+                            <span class="badge bg-success mb-2">Likely Logo</span>
+                        {% elif "Logo Classification: Possibly Logo" in analysis.result %}
+                            <span class="badge bg-warning text-dark mb-2">Possibly Logo</span>
+                        {% else %}
+                            <span class="badge bg-danger mb-2">Non-logo-like</span>
+                        {% endif %}
+                        <p class="card-text" style="white-space: pre-line;">{{ analysis.result }}</p>
+                        <p class="text-secondary small mb-3">{{ analysis.created_at }}</p>
+                        <a href="/result/{{ analysis.id }}" class="btn btn-warning btn-sm me-2">View</a>
+                        <a href="/delete/{{ analysis.id }}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-secondary">No analyses found.</p>
+{% endif %}
+{% endblock %}

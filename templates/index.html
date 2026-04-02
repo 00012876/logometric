@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Home - LogoMetric{% endblock %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block background_video %}
+<div class="video-background">
+    <video autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='videos/bg.mp4') }}" type="video/mp4">
+    </video>
+</div>
+<div class="video-overlay"></div>
+{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="display-3 fw-bold">LogoMetric</h1>
+
+    <p class="lead mt-3">
+        AI-powered logo analysis platform for global designers
+    </p>
+
+    <div class="mt-5">
+        <a href="/register" class="btn btn-warning btn-lg me-3">Register</a>
+        <a href="/login" class="btn btn-outline-light btn-lg">Login</a>
+    </div>
+</div>
+{% endblock %}

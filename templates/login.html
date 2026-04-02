@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Login - LogoMetric{% endblock %}
+
+{% block body_class %}auth-page{% endblock %}
+
+{% block background_video %}
+<div class="video-background">
+    <video autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='videos/bg.mp4') }}" type="video/mp4">
+    </video>
+</div>
+<div class="video-overlay"></div>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <h2 class="mb-4 text-center">Login</h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Email address</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-warning w-100">Login</button>
+    </form>
+</div>
+{% endblock %}

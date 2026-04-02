@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Result - LogoMetric{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Analysis Result</h1>
+<div class="card border-0 mb-4 bg-{{ summary_color }}">
+    <div class="card-body text-dark">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="mb-2">Logo Suitability Score</h5>
+                <div class="display-5 fw-bold">
+                    {{ logo_suitability_score if logo_suitability_score is not none else "N/A" }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="mb-2">Logo Classification</h5>
+                <div class="fs-3 fw-bold">
+                    {{ logo_classification if logo_classification else "Unknown" }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card bg-black text-white border-secondary mb-4">
+    <div class="card-body">
+        <img src="/static/uploads/{{ analysis.filename }}" 
+             class="img-fluid mb-4 rounded"
+             style="max-height:300px; object-fit:contain;">
+
+        <h4 class="card-title">{{ analysis.filename }}</h4>
+        {% if "Logo Classification: Likely Logo" in analysis.result %}
+            <span class="badge bg-success mb-2">Likely Logo</span>
+        {% elif "Logo Classification: Possibly Logo" in analysis.result %}
+            <span class="badge bg-warning text-dark mb-2">Possibly Logo</span>
+        {% else %}
+            <span class="badge bg-danger mb-2">Non-logo-like</span>
+        {% endif %}
+        <p class="text-secondary small">{{ analysis.created_at }}</p>
+
+        <hr class="border-secondary">
+
+        <p style="white-space: pre-line;" class="fs-5">{{ analysis.result }}</p>
+    </div>
+</div>
+
+<div class="d-flex gap-2">
+    <a href="/history" class="btn btn-outline-light">Back to History</a>
+    <a href="/dashboard" class="btn btn-warning">Back to Dashboard</a>
+    <a href="/export_pdf/{{ analysis.id }}" class="btn btn-success">Download PDF</a>
+</div>
+{% endblock %}

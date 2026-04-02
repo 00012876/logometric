@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - LogoMetric{% endblock %}
+
+{% block head_extra %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">Dashboard</h1>
+<p class="text-secondary">Welcome back, {{ current_user.email }}</p>
+
+<div class="row mt-4">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-black text-white border-secondary">
+            <div class="card-body">
+                <h5 class="card-title">Total Analyses</h5>
+                <p class="card-text fs-2">{{ total_analyses }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card bg-black text-white border-secondary">
+            <div class="card-body">
+                <h5 class="card-title">Average Score</h5>
+                <p class="card-text fs-2">{{ average_score }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card bg-black text-white border-secondary h-100">
+            <div class="card-body">
+                <h5 class="card-title">Last Upload</h5>
+
+                {% if last_upload_image %}
+                    <img src="/static/uploads/{{ last_upload_image }}"
+                        class="img-fluid rounded mb-3"
+                        style="max-height:140px; object-fit:contain;">
+                {% endif %}
+
+                <p class="card-text fs-5">{{ last_upload }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="/upload" class="btn btn-warning btn-lg me-2">Upload Logo</a>
+    <a href="/history" class="btn btn-outline-light btn-lg">View History</a>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6 mb-4">
+        <div class="card bg-black text-white border-secondary">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Overall Score Trend</h5>
+                <canvas id="overallChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card bg-black text-white border-secondary">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Criteria Comparison</h5>
+                <canvas id="criteriaChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const labels = {{ labels|tojson }};
+    const overallScores = {{ overall_scores|tojson }};
+    const contrastScores = {{ contrast_scores|tojson }};
+    const complexityScores = {{ complexity_scores|tojson }};
+    const balanceScores = {{ balance_scores|tojson }};
+
+    const overallCtx = document.getElementById('overallChart');
+
+    new Chart(overallCtx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Overall Score',
+                data: overallScores,
+                borderWidth: 2,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    });
+
+    const criteriaCtx = document.getElementById('criteriaChart');
+
+    new Chart(criteriaCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Contrast',
+                    data: contrastScores,
+                    borderWidth: 1
+                },
+                {
+                    label: 'Complexity',
+                    data: complexityScores,
+                    borderWidth: 1
+                },
+                {
+                    label: 'Balance',
+                    data: balanceScores,
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
